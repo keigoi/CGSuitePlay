@@ -1,25 +1,29 @@
 package ctlab;
 
+import static scala.collection.JavaConverters.asJava;
+
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 
 import org.cgsuite.lang.CgscriptClass;
+import org.cgsuite.lang.CgscriptClasspath;
 import org.cgsuite.output.Output;
 
 import scala.Symbol;
-import scala.collection.immutable.Vector;
 import scala.collection.mutable.AnyRefMap;
 
-public class TryRunGame {
+public class LoadAndRun {
 
 	public static void main(String[] args) {
 	    CgscriptClass.clearAll();
 	    CgscriptClass.Object().ensureInitialized();
 	    
+	    CgscriptClasspath.declareClasspathRoot(new File("scripts/"), false);
+	    
 	    AnyRefMap<Symbol, Object> varMap = new AnyRefMap<>(); 
 
-	    Vector<Output> ret0 = org.cgsuite.lang.System.evaluateOrException("game.grid.Clobber(\"xox|ox.\").CanonicalForm", varMap);
-	    List<Output> outs = scala.collection.JavaConverters.asJava(ret0);
+	    List<Output> outs = asJava( org.cgsuite.lang.System.evaluateOrException("MyGame(\"xox|ox.\").CanonicalForm", varMap) );
 	    
 	    PrintWriter wri = new PrintWriter(System.out);
 	    for(Output o : outs) {
@@ -29,6 +33,7 @@ public class TryRunGame {
 	    wri.flush();
 	    
 	    System.out.println("Finished successfully.");
+
 	}
 
 }

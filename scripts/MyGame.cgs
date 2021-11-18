@@ -1,0 +1,16 @@
+// from Clobber.cgs in the examples
+singleton class MyGame extends game.grid.GridRuleset
+  class Position(grid as Grid) extends GridGame
+    override def Options(player as Player) begin
+      var us := player.Ordinal;
+      var them := player.Opponent.Ordinal;
+      for coord in grid FindAll us
+      for direction in Coordinates.Orthogonal
+      where grid[coord + direction] == them
+      yield
+        Position(grid Updated { coord => 0, coord + direction => us })
+      end
+    end
+  end
+  override def CharMap := ".xo";
+end
